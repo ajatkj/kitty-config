@@ -1,0 +1,15 @@
+# Personal Kitty session layouts
+sessions/
+
+# Local caches and generated files
+.mypy_cache/
+__pycache__/
+*.py[cod]
+
+# Local backup copy
+
+# OS and editor metadata
+.DS_Store
+*~
+.idea/
+.vscode/

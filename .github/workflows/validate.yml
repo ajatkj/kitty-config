@@ -1,0 +1,39 @@
+name: Validate configuration
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Compile Python extensions
+        run: python -m py_compile relative_resize.py tab_bar.py
+
+      - name: Validate tracked configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f kitty.conf
+          test -f keymap.conf
+          test -f Kanagawa.conf
+          test -f Catppuccin-Macchiato.conf
+          test ! -d sessions
+          test ! -f tab_bar_bk.py
+          if git ls-files | grep -E '(^|/)(sessions|tab_bar_bk\.py|\.mypy_cache)(/|$)'; then
+            echo 'Personal sessions, backup files, and caches must not be tracked.' >&2
+            exit 1
+          fi
+          if git grep -n -E '/Users/|/home/|Profile [0-9]+|localhost:[0-9]+|codex resume' -- '*.conf' '*.py'; then
+            echo 'Machine-specific paths or session content must not be tracked.' >&2
+            exit 1
+          fi
