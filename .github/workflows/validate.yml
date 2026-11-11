@@ -14,7 +14,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: "3.x"
 
       - name: Compile Python extensions
         run: python -m py_compile relative_resize.py tab_bar.py
@@ -25,10 +25,9 @@ jobs:
           set -euo pipefail
           test -f kitty.conf
           test -f keymap.conf
-          test -f Kanagawa.conf
-          test -f Catppuccin-Macchiato.conf
-          test ! -d sessions
-          test ! -f tab_bar_bk.py
+          test -f kanagawa.conf
+          test -f kitty-quick-access-terminal.conf
+          test -f catppuccin-macchiato.conf
           if git ls-files | grep -E '(^|/)(sessions|tab_bar_bk\.py|\.mypy_cache)(/|$)'; then
             echo 'Personal sessions, backup files, and caches must not be tracked.' >&2
             exit 1
